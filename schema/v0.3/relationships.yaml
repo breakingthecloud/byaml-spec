@@ -1,0 +1,117 @@
+# BYaML Relationship Matrix v1.0
+# Defines which from/to/type combinations are valid.
+# If a relationship is not in this matrix, it produces a WARNING (not error)
+# to allow for edge cases while flagging likely mistakes.
+
+version: "1.0"
+
+relationships:
+  # API Gateway → compute
+  - from: aws.apigateway
+    to: aws.lambda
+    type: [invokes, routes_to]
+
+  - from: aws.apigateway
+    to: aws.alb
+    type: [routes_to]
+
+  # CloudFront → origins
+  - from: aws.cloudfront
+    to: aws.s3
+    type: [origin]
+
+  - from: aws.cloudfront
+    to: aws.alb
+    type: [origin]
+
+  - from: aws.cloudfront
+    to: aws.apigateway
+    type: [origin]
+
+  # ALB → compute
+  - from: aws.alb
+    to: aws.ec2
+    type: [routes_to]
+
+  - from: aws.alb
+    to: aws.lambda
+    type: [routes_to]
+
+  # Lambda → data/storage/integration
+  - from: aws.lambda
+    to: aws.dynamodb
+    type: [reads, writes, reads_writes]
+
+  - from: aws.lambda
+    to: aws.s3
+    type: [reads, writes, reads_writes]
+
+  - from: aws.lambda
+    to: aws.rds
+    type: [reads, writes, reads_writes]
+
+  - from: aws.lambda
+    to: aws.sqs
+    type: [publishes_to, reads]
+
+  - from: aws.lambda
+    to: aws.sns
+    type: [publishes_to]
+
+  - from: aws.lambda
+    to: aws.cloudwatch.logs
+    type: [writes]
+
+  # EC2 → data/storage
+  - from: aws.ec2
+    to: aws.dynamodb
+    type: [reads, writes, reads_writes]
+
+  - from: aws.ec2
+    to: aws.s3
+    type: [reads, writes, reads_writes]
+
+  - from: aws.ec2
+    to: aws.rds
+    type: [reads, writes, reads_writes]
+
+  # EventBridge → triggers
+  - from: aws.eventbridge
+    to: aws.lambda
+    type: [triggers]
+
+  - from: aws.eventbridge
+    to: aws.sqs
+    type: [publishes_to]
+
+  - from: aws.eventbridge
+    to: aws.sns
+    type: [publishes_to]
+
+  # SQS → Lambda
+  - from: aws.sqs
+    to: aws.lambda
+    type: [triggers]
+
+  # SNS → Lambda/SQS
+  - from: aws.sns
+    to: aws.lambda
+    type: [triggers]
+
+  - from: aws.sns
+    to: aws.sqs
+    type: [publishes_to]
+
+  # Monitoring
+  - from: aws.cloudwatch.logs
+    to: aws.lambda
+    type: [monitors]
+
+  # NAT Gateway
+  - from: aws.lambda
+    to: aws.nat-gateway
+    type: [routes_to]
+
+  - from: aws.ec2
+    to: aws.nat-gateway
+    type: [routes_to]

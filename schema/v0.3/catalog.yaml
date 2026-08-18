@@ -1,0 +1,1025 @@
+version: '0.3'
+generatedAt: '2026-06-06T22:24:53.923Z'
+components:
+  - type: aws.lambda
+    category: compute
+    defaultLayer: compute
+    required:
+      - runtime
+      - memory
+      - timeout
+    allowed:
+      - runtime
+      - memory
+      - timeout
+      - handler
+      - environmentVariables
+      - vpc
+      - reservedConcurrency
+      - architecture
+    taggable: true
+    provider: aws
+  - type: aws.apigateway
+    category: networking
+    defaultLayer: edge
+    required: []
+    allowed:
+      - type
+      - routes
+      - cors
+      - throttling
+    taggable: true
+    provider: aws
+  - type: aws.dynamodb
+    category: database
+    defaultLayer: data
+    required:
+      - billingMode
+    allowed:
+      - billingMode
+      - readCapacity
+      - writeCapacity
+      - gsi
+      - lsi
+      - ttl
+      - encryption
+      - pointInTimeRecovery
+    taggable: true
+    provider: aws
+  - type: aws.s3
+    category: storage
+    defaultLayer: storage
+    required: []
+    allowed:
+      - versioning
+      - encryption
+      - lifecyclePolicy
+      - publicAccess
+      - cors
+      - replication
+      - storageClass
+    taggable: true
+    provider: aws
+  - type: aws.rds
+    category: database
+    defaultLayer: data
+    required:
+      - engine
+      - instanceClass
+    allowed:
+      - engine
+      - engineVersion
+      - instanceClass
+      - multiAZ
+      - storage
+      - storageType
+      - backupRetention
+      - encryption
+      - publiclyAccessible
+    taggable: true
+    provider: aws
+  - type: aws.ec2
+    category: compute
+    defaultLayer: compute
+    required:
+      - instanceType
+    allowed:
+      - instanceType
+      - ami
+      - subnet
+      - securityGroups
+      - keyPair
+      - userData
+      - ebsOptimized
+    taggable: true
+    provider: aws
+  - type: aws.cloudfront
+    category: networking
+    defaultLayer: edge
+    required: []
+    allowed:
+      - origins
+      - defaultCacheBehavior
+      - priceClass
+      - waf
+      - certificate
+    taggable: true
+    provider: aws
+  - type: aws.sqs
+    category: integration
+    defaultLayer: integration
+    required: []
+    allowed:
+      - fifo
+      - visibilityTimeout
+      - messageRetention
+      - deadLetterQueue
+      - encryption
+    taggable: true
+    provider: aws
+  - type: aws.sns
+    category: integration
+    defaultLayer: integration
+    required: []
+    allowed:
+      - fifo
+      - encryption
+      - subscriptions
+    taggable: true
+    provider: aws
+  - type: aws.eventbridge
+    category: integration
+    defaultLayer: integration
+    required: []
+    allowed:
+      - rules
+      - targets
+      - eventBus
+    taggable: true
+    provider: aws
+  - type: aws.cloudwatch.logs
+    category: monitoring
+    defaultLayer: monitoring
+    required: []
+    allowed:
+      - retentionDays
+      - encryption
+    taggable: true
+    provider: aws
+  - type: aws.alb
+    category: networking
+    defaultLayer: edge
+    required: []
+    allowed:
+      - scheme
+      - listeners
+      - targetGroups
+      - securityGroups
+      - subnets
+    taggable: true
+    provider: aws
+  - type: aws.nat-gateway
+    category: networking
+    defaultLayer: network
+    required: []
+    allowed:
+      - subnet
+      - elasticIp
+    taggable: true
+    provider: aws
+  - type: aws.ecs
+    category: compute
+    defaultLayer: compute
+    required: []
+    allowed:
+      - launchType
+      - desiredCount
+      - taskDefinition
+    taggable: true
+    provider: aws
+  - type: aws.eks
+    category: compute
+    defaultLayer: compute
+    required: []
+    allowed:
+      - version
+      - nodeGroupSize
+      - vpcConfig
+    taggable: true
+    provider: aws
+  - type: aws.stepfunctions
+    category: compute
+    defaultLayer: compute
+    required: []
+    allowed:
+      - definition
+      - type
+    taggable: true
+    provider: aws
+  - type: aws.kinesis
+    category: integration
+    defaultLayer: integration
+    required: []
+    allowed:
+      - shardCount
+      - retentionPeriod
+    taggable: true
+    provider: aws
+  - type: aws.elasticache
+    category: database
+    defaultLayer: data
+    required:
+      - engine
+    allowed:
+      - engine
+      - nodeType
+      - numNodes
+      - replicaCount
+    taggable: true
+    provider: aws
+  - type: aws.opensearch
+    category: database
+    defaultLayer: data
+    required: []
+    allowed:
+      - engineVersion
+      - instanceType
+      - instanceCount
+      - volumeSize
+    taggable: true
+    provider: aws
+  - type: aws.cognito
+    category: security
+    defaultLayer: security
+    required: []
+    allowed:
+      - mfa
+      - passwordPolicy
+    taggable: true
+    provider: aws
+  - type: aws.fargate
+    category: compute
+    defaultLayer: compute
+    required: []
+    allowed:
+      - cpu
+      - memory
+    taggable: true
+    provider: aws
+  - type: aws.aurora
+    category: database
+    defaultLayer: data
+    required:
+      - engine
+    allowed:
+      - engine
+      - engineVersion
+      - instanceClass
+      - replicaCount
+    taggable: true
+    provider: aws
+  - type: aws.redshift
+    category: database
+    defaultLayer: data
+    required: []
+    allowed:
+      - nodeType
+      - numberOfNodes
+      - clusterType
+    taggable: true
+    provider: aws
+  - type: aws.glue
+    category: data
+    defaultLayer: data
+    required: []
+    allowed:
+      - workerType
+      - numberOfWorkers
+    taggable: true
+    provider: aws
+  - type: aws.athena
+    category: data
+    defaultLayer: data
+    required: []
+    allowed:
+      - workgroup
+      - outputLocation
+    taggable: true
+    provider: aws
+  - type: aws.sagemaker
+    category: ai-ml
+    defaultLayer: compute
+    required: []
+    allowed:
+      - instanceType
+      - instanceCount
+      - modelName
+    taggable: true
+    provider: aws
+  - type: aws.bedrock
+    category: ai-ml
+    defaultLayer: compute
+    required: []
+    allowed:
+      - modelId
+      - throughputName
+    taggable: true
+    provider: aws
+  - type: aws.route53
+    category: networking
+    defaultLayer: edge
+    required: []
+    allowed:
+      - hostedZone
+      - recordType
+    taggable: true
+    provider: aws
+  - type: aws.waf
+    category: security
+    defaultLayer: edge
+    required: []
+    allowed:
+      - scope
+      - rules
+    taggable: true
+    provider: aws
+  - type: aws.secrets-manager
+    category: security
+    defaultLayer: security
+    required: []
+    allowed:
+      - rotationEnabled
+      - rotationDays
+    taggable: true
+    provider: aws
+  - type: aws.kms
+    category: security
+    defaultLayer: security
+    required: []
+    allowed:
+      - keyUsage
+      - keySpec
+    taggable: true
+    provider: aws
+  - type: aws.codepipeline
+    category: devops
+    defaultLayer: compute
+    required: []
+    allowed:
+      - stages
+    taggable: true
+    provider: aws
+  - type: aws.codebuild
+    category: devops
+    defaultLayer: compute
+    required: []
+    allowed:
+      - computeType
+      - image
+      - timeout
+    taggable: true
+    provider: aws
+  - type: aws.ecr
+    category: compute
+    defaultLayer: storage
+    required: []
+    allowed:
+      - imageScanOnPush
+      - encryptionType
+    taggable: true
+    provider: aws
+  - type: aws.appsync
+    category: networking
+    defaultLayer: edge
+    required: []
+    allowed:
+      - authenticationType
+      - schema
+    taggable: true
+    provider: aws
+  - type: aws.msk
+    category: integration
+    defaultLayer: integration
+    required: []
+    allowed:
+      - kafkaVersion
+      - brokerNodeCount
+      - instanceType
+    taggable: true
+    provider: aws
+  - type: aws.documentdb
+    category: database
+    defaultLayer: data
+    required: []
+    allowed:
+      - engine
+      - instanceClass
+      - instanceCount
+    taggable: true
+    provider: aws
+  - type: aws.neptune
+    category: database
+    defaultLayer: data
+    required: []
+    allowed:
+      - engine
+      - instanceClass
+    taggable: true
+    provider: aws
+relationships:
+  - fromType: aws.apigateway
+    toType: aws.lambda
+    relationshipType:
+      - invokes
+      - routes_to
+    bidirectional: false
+  - fromType: aws.apigateway
+    toType: aws.alb
+    relationshipType:
+      - routes_to
+    bidirectional: false
+  - fromType: aws.cloudfront
+    toType: aws.s3
+    relationshipType:
+      - origin
+    bidirectional: false
+  - fromType: aws.cloudfront
+    toType: aws.alb
+    relationshipType:
+      - origin
+    bidirectional: false
+  - fromType: aws.cloudfront
+    toType: aws.apigateway
+    relationshipType:
+      - origin
+    bidirectional: false
+  - fromType: aws.alb
+    toType: aws.ec2
+    relationshipType:
+      - routes_to
+    bidirectional: false
+  - fromType: aws.alb
+    toType: aws.lambda
+    relationshipType:
+      - routes_to
+    bidirectional: false
+  - fromType: aws.lambda
+    toType: aws.dynamodb
+    relationshipType:
+      - reads
+      - writes
+      - reads_writes
+    bidirectional: false
+  - fromType: aws.lambda
+    toType: aws.s3
+    relationshipType:
+      - reads
+      - writes
+      - reads_writes
+    bidirectional: false
+  - fromType: aws.lambda
+    toType: aws.rds
+    relationshipType:
+      - reads
+      - writes
+      - reads_writes
+    bidirectional: false
+  - fromType: aws.lambda
+    toType: aws.sqs
+    relationshipType:
+      - publishes_to
+      - reads
+    bidirectional: false
+  - fromType: aws.lambda
+    toType: aws.sns
+    relationshipType:
+      - publishes_to
+    bidirectional: false
+  - fromType: aws.lambda
+    toType: aws.cloudwatch.logs
+    relationshipType:
+      - writes
+    bidirectional: false
+  - fromType: aws.ec2
+    toType: aws.dynamodb
+    relationshipType:
+      - reads
+      - writes
+      - reads_writes
+    bidirectional: false
+  - fromType: aws.ec2
+    toType: aws.s3
+    relationshipType:
+      - reads
+      - writes
+      - reads_writes
+    bidirectional: false
+  - fromType: aws.ec2
+    toType: aws.rds
+    relationshipType:
+      - reads
+      - writes
+      - reads_writes
+    bidirectional: false
+  - fromType: aws.eventbridge
+    toType: aws.lambda
+    relationshipType:
+      - triggers
+    bidirectional: false
+  - fromType: aws.eventbridge
+    toType: aws.sqs
+    relationshipType:
+      - publishes_to
+    bidirectional: false
+  - fromType: aws.eventbridge
+    toType: aws.sns
+    relationshipType:
+      - publishes_to
+    bidirectional: false
+  - fromType: aws.sqs
+    toType: aws.lambda
+    relationshipType:
+      - triggers
+    bidirectional: false
+  - fromType: aws.sns
+    toType: aws.lambda
+    relationshipType:
+      - triggers
+    bidirectional: false
+  - fromType: aws.sns
+    toType: aws.sqs
+    relationshipType:
+      - publishes_to
+    bidirectional: false
+  - fromType: aws.cloudwatch.logs
+    toType: aws.lambda
+    relationshipType:
+      - monitors
+    bidirectional: false
+  - fromType: aws.lambda
+    toType: aws.nat-gateway
+    relationshipType:
+      - routes_to
+    bidirectional: false
+  - fromType: aws.ec2
+    toType: aws.nat-gateway
+    relationshipType:
+      - routes_to
+    bidirectional: false
+policies:
+  - policyId: FINOPS-001
+    severity: error
+    message: All production resources must have costCenter tag
+    checkType: require_tag
+    conditions:
+      when:
+        architecture.environment: prod
+      check:
+        type: require_tag
+        tag: costCenter
+    category: finops
+  - policyId: FINOPS-002
+    severity: error
+    message: All resources must have owner tag
+    checkType: require_tag
+    conditions:
+      when: null
+      check:
+        type: require_tag
+        tag: owner
+    category: finops
+  - policyId: FINOPS-003
+    severity: error
+    message: All resources must have environment tag
+    checkType: require_tag
+    conditions:
+      when: null
+      check:
+        type: require_tag
+        tag: env
+    category: finops
+  - policyId: FINOPS-004
+    severity: warning
+    message: All resources should have app tag
+    checkType: require_tag
+    conditions:
+      when: null
+      check:
+        type: require_tag
+        tag: app
+    category: finops
+  - policyId: FINOPS-005
+    severity: error
+    message: Production architectures must define a budget
+    checkType: require_tag
+    conditions:
+      when:
+        architecture.environment: prod
+      check:
+        type: require_field
+        path: finops.budget.monthlyLimit
+    category: finops
+  - policyId: FINOPS-006
+    severity: warning
+    message: S3 buckets should have lifecycle policy
+    checkType: require_tag
+    conditions:
+      when: null
+      check:
+        type: require_property
+        componentType: aws.s3
+        property: lifecyclePolicy
+    category: finops
+  - policyId: FINOPS-007
+    severity: warning
+    message: CloudWatch log groups should define retention
+    checkType: require_tag
+    conditions:
+      when: null
+      check:
+        type: require_property
+        componentType: aws.cloudwatch.logs
+        property: retentionDays
+    category: finops
+  - policyId: FINOPS-008
+    severity: warning
+    message: NAT Gateway should be associated with costCenter tag
+    checkType: require_tag
+    conditions:
+      when: null
+      check:
+        type: require_tag
+        componentType: aws.nat-gateway
+        tag: costCenter
+    category: finops
+  - policyId: FINOPS-009
+    severity: warning
+    message: RDS instances should declare backup retention
+    checkType: require_tag
+    conditions:
+      when: null
+      check:
+        type: require_property
+        componentType: aws.rds
+        property: backupRetention
+    category: finops
+  - policyId: FINOPS-010
+    severity: error
+    message: Resources without any tags cannot pass in CI/CD
+    checkType: require_tag
+    conditions:
+      when: null
+      check:
+        type: require_any_tags
+    category: finops
+  - policyId: OPS-001
+    severity: error
+    message: Production architectures must have an owner
+    checkType: require_tag
+    conditions:
+      when:
+        architecture.environment: prod
+      check:
+        type: require_field
+        path: architecture.owner
+    category: ops
+  - policyId: OPS-002
+    severity: warning
+    message: All architectures should have a description
+    checkType: require_tag
+    conditions:
+      when: null
+      check:
+        type: require_field
+        path: architecture.name
+    category: ops
+  - policyId: OPS-003
+    severity: error
+    message: RDS Multi-AZ should not be enabled on dev/test environments
+    checkType: require_tag
+    conditions:
+      when:
+        architecture.environment:
+          - dev
+          - test
+          - sandbox
+      check:
+        type: forbid_property_value
+        componentType: aws.rds
+        property: multiAZ
+        value: true
+    category: ops
+terraformMappings:
+  - terraformType: aws_lambda_function
+    byamlType: aws.lambda
+    layer: compute
+  - terraformType: aws_instance
+    byamlType: aws.ec2
+    layer: compute
+  - terraformType: aws_ecs_service
+    byamlType: aws.ecs
+    layer: compute
+  - terraformType: aws_s3_bucket
+    byamlType: aws.s3
+    layer: storage
+  - terraformType: aws_dynamodb_table
+    byamlType: aws.dynamodb
+    layer: data
+  - terraformType: aws_db_instance
+    byamlType: aws.rds
+    layer: data
+  - terraformType: aws_rds_cluster
+    byamlType: aws.rds
+    layer: data
+  - terraformType: aws_lb
+    byamlType: aws.alb
+    layer: edge
+  - terraformType: aws_alb
+    byamlType: aws.alb
+    layer: edge
+  - terraformType: aws_cloudfront_distribution
+    byamlType: aws.cloudfront
+    layer: edge
+  - terraformType: aws_nat_gateway
+    byamlType: aws.nat-gateway
+    layer: network
+  - terraformType: aws_api_gateway_rest_api
+    byamlType: aws.apigateway
+    layer: edge
+  - terraformType: aws_apigatewayv2_api
+    byamlType: aws.apigateway
+    layer: edge
+  - terraformType: aws_sqs_queue
+    byamlType: aws.sqs
+    layer: integration
+  - terraformType: aws_sns_topic
+    byamlType: aws.sns
+    layer: integration
+  - terraformType: aws_cloudwatch_event_rule
+    byamlType: aws.eventbridge
+    layer: integration
+  - terraformType: aws_sfn_state_machine
+    byamlType: aws.stepfunctions
+    layer: compute
+  - terraformType: aws_cloudwatch_log_group
+    byamlType: aws.cloudwatch.logs
+    layer: monitoring
+  - terraformType: aws_kinesis_stream
+    byamlType: aws.kinesis
+    layer: integration
+  - terraformType: aws_eks_cluster
+    byamlType: aws.eks
+    layer: compute
+  - terraformType: aws_eks_node_group
+    byamlType: aws.eks
+    layer: compute
+  - terraformType: aws_elasticache_cluster
+    byamlType: aws.elasticache
+    layer: data
+  - terraformType: aws_elasticache_replication_group
+    byamlType: aws.elasticache
+    layer: data
+  - terraformType: aws_opensearch_domain
+    byamlType: aws.opensearch
+    layer: data
+  - terraformType: aws_cognito_user_pool
+    byamlType: aws.cognito
+    layer: security
+  - terraformType: aws_redshift_cluster
+    byamlType: aws.redshift
+    layer: data
+  - terraformType: aws_glue_job
+    byamlType: aws.glue
+    layer: data
+  - terraformType: aws_glue_crawler
+    byamlType: aws.glue
+    layer: data
+  - terraformType: aws_athena_workgroup
+    byamlType: aws.athena
+    layer: data
+  - terraformType: aws_sagemaker_endpoint
+    byamlType: aws.sagemaker
+    layer: compute
+  - terraformType: aws_route53_zone
+    byamlType: aws.route53
+    layer: edge
+  - terraformType: aws_wafv2_web_acl
+    byamlType: aws.waf
+    layer: edge
+  - terraformType: aws_secretsmanager_secret
+    byamlType: aws.secrets-manager
+    layer: security
+  - terraformType: aws_kms_key
+    byamlType: aws.kms
+    layer: security
+  - terraformType: aws_codepipeline
+    byamlType: aws.codepipeline
+    layer: compute
+  - terraformType: aws_codebuild_project
+    byamlType: aws.codebuild
+    layer: compute
+  - terraformType: aws_ecr_repository
+    byamlType: aws.ecr
+    layer: storage
+  - terraformType: aws_appsync_graphql_api
+    byamlType: aws.appsync
+    layer: edge
+  - terraformType: aws_msk_cluster
+    byamlType: aws.msk
+    layer: integration
+  - terraformType: aws_docdb_cluster
+    byamlType: aws.documentdb
+    layer: data
+  - terraformType: aws_neptune_cluster
+    byamlType: aws.neptune
+    layer: data
+  - type: aws.workspaces
+    category: compute
+    defaultLayer: compute
+    required: []
+    allowed:
+      - bundleId
+      - directoryId
+      - runningMode
+      - rootVolumeSize
+      - userVolumeSize
+    taggable: true
+    provider: aws
+  - type: aws.vpc
+    category: networking
+    defaultLayer: network
+    required: []
+    allowed:
+      - cidr
+      - subnets
+      - enableDnsSupport
+      - enableDnsHostnames
+    taggable: true
+    provider: aws
+  - type: aws.vpn
+    category: networking
+    defaultLayer: network
+    required: []
+    allowed:
+      - type
+      - tunnels
+      - customerGateway
+      - staticRoutes
+    taggable: true
+    provider: aws
+  - type: aws.transit-gateway
+    category: networking
+    defaultLayer: network
+    required: []
+    allowed:
+      - amazonSideAsn
+      - autoAcceptSharedAttachments
+    taggable: true
+    provider: aws
+  - type: aws.network-firewall
+    category: security
+    defaultLayer: edge
+    required: []
+    allowed:
+      - policy
+      - ruleGroups
+      - statefulRules
+      - statelessRules
+    taggable: true
+    provider: aws
+  - type: aws.backup
+    category: storage
+    defaultLayer: storage
+    required: []
+    allowed:
+      - scheduleExpression
+      - retention
+      - lifecycle
+      - vaultName
+    taggable: true
+    provider: aws
+  - type: aws.directory-service
+    category: security
+    defaultLayer: compute
+    required: []
+    allowed:
+      - type
+      - edition
+      - size
+      - vpcSettings
+    taggable: true
+    provider: aws
+  - type: aws.efs
+    category: storage
+    defaultLayer: storage
+    required: []
+    allowed:
+      - performanceMode
+      - throughputMode
+      - encrypted
+      - lifecyclePolicy
+    taggable: true
+    provider: aws
+  - type: aws.ebs
+    category: storage
+    defaultLayer: storage
+    required: []
+    allowed:
+      - volumeType
+      - size
+      - iops
+      - throughput
+      - encrypted
+    taggable: true
+    provider: aws
+  - type: aws.iam
+    category: security
+    defaultLayer: security
+    required: []
+    allowed:
+      - policies
+      - roles
+      - users
+      - groups
+    taggable: false
+    provider: aws
+  - type: aws.organizations
+    category: security
+    defaultLayer: security
+    required: []
+    allowed:
+      - featureSet
+      - policies
+    taggable: false
+    provider: aws
+  - type: aws.dms
+    category: integration
+    defaultLayer: integration
+    required: []
+    allowed:
+      - sourceEndpoint
+      - targetEndpoint
+      - replicationInstanceClass
+      - migrationType
+    taggable: true
+    provider: aws
+  - type: aws.mgn
+    category: integration
+    defaultLayer: integration
+    required: []
+    allowed:
+      - sourceServerOS
+      - targetInstanceType
+      - launchTemplate
+    taggable: true
+    provider: aws
+  - type: aws.elasticbeanstalk
+    category: compute
+    defaultLayer: compute
+    required: []
+    allowed:
+      - platform
+      - instanceType
+      - environmentType
+      - loadBalancerType
+    taggable: true
+    provider: aws
+  - type: aws.direct-connect
+    category: networking
+    defaultLayer: network
+    required: []
+    allowed:
+      - bandwidth
+      - location
+      - vlan
+    taggable: true
+    provider: aws
+  - type: aws.datasync
+    category: integration
+    defaultLayer: integration
+    required: []
+    allowed:
+      - sourceLocation
+      - destinationLocation
+      - schedule
+    taggable: true
+    provider: aws
+  - type: aws.security-hub
+    category: monitoring
+    defaultLayer: monitoring
+    required: []
+    allowed:
+      - standards
+      - autoEnableControls
+    taggable: false
+    provider: aws
+  - type: aws.guardduty
+    category: monitoring
+    defaultLayer: monitoring
+    required: []
+    allowed:
+      - findingPublishingFrequency
+      - dataSources
+    taggable: true
+    provider: aws
+  - type: aws.cloudtrail
+    category: monitoring
+    defaultLayer: monitoring
+    required: []
+    allowed:
+      - isMultiRegion
+      - includeGlobalServiceEvents
+      - s3BucketName
+      - enableLogFileValidation
+    taggable: true
+    provider: aws
+  - type: aws.config
+    category: monitoring
+    defaultLayer: monitoring
+    required: []
+    allowed:
+      - rules
+      - deliveryChannel
+      - recordingGroup
+    taggable: false
+    provider: aws

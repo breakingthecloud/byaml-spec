@@ -50,6 +50,9 @@
 - **byaml-core (NestJS+Mongo):** NO se migra tal cual → se extrae lógica validate/convert y se
   **reescribe en Python** (mismo runtime del engine, una sola codebase). Se audita en ByaML-001.
 - **byaml-finops-mcp:** es la **base** del MCP v2 (entry point AI-native vivo).
+- **`private-byaml-schema`:** repo **local** (no GitHub) en `~/dev/brickstore/brick2026/`. Es la fuente
+  del **schema v0.3 + catalog + policies + relationships + publish.sh**. **Migrado** a `byaml-spec/schema/v0.3/`
+  en ByaML-001 → base del modelo v0.4 en ByaML-002.
 - **DrawBrick / byaml-vscode / byaml-cli:** sin `.byaml` de usuario, quedan en espera/descarte.
 - **Repos viejos `brickstore-ai/byaml-*`:** NO se eliminan (histórico). Freeze con README redirect
   se hace en una fase posterior (no bloquea).

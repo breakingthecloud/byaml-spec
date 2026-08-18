@@ -1,0 +1,186 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BYaML Schema v0.3",
+  "description": "BYaML (Brickstore YAML Architecture Language) — metadata-driven architecture definition with relationships, FinOps, and governance.",
+  "type": "object",
+  "required": ["byamlVersion", "architecture", "components"],
+  "properties": {
+    "byamlVersion": {
+      "type": "string",
+      "const": "0.3",
+      "description": "Schema version"
+    },
+    "architecture": {
+      "type": "object",
+      "required": ["id", "environment"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "description": "Unique architecture identifier (kebab-case)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable architecture name"
+        },
+        "description": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "string",
+          "enum": ["prod", "staging", "dev", "test", "sandbox"],
+          "description": "Deployment environment — gates FinOps and governance rules"
+        },
+        "owner": {
+          "type": "string",
+          "description": "Team or person responsible"
+        },
+        "businessUnit": {
+          "type": "string"
+        },
+        "criticality": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low"]
+        },
+        "cloudProvider": {
+          "type": "string",
+          "enum": ["aws", "azure", "gcp", "multi"]
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "type": "string",
+          "description": "Project name (alias for architecture.name)"
+        },
+        "created": {
+          "type": "string",
+          "format": "date"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["terraform", "cdk", "cloudformation", "manual", "scan"]
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/Component"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Relationship"
+      }
+    },
+    "finops": {
+      "$ref": "#/definitions/FinOps"
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Optional extensions (AI, platform-specific, custom)",
+      "additionalProperties": true
+    }
+  },
+  "definitions": {
+    "Component": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "description": "Unique component identifier (kebab-case)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable display name"
+        },
+        "type": {
+          "type": "string",
+          "pattern": "^(aws|azure|gcp)\\.[a-z0-9-]+\\.[a-z0-9-]+$|^(aws|azure|gcp)\\.[a-z0-9-]+$",
+          "description": "Cloud resource type (e.g. aws.lambda, aws.s3, aws.ec2.instance)"
+        },
+        "layer": {
+          "type": "string",
+          "enum": ["edge", "compute", "data", "storage", "network", "security", "monitoring", "integration"]
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Key-value tags for governance and FinOps"
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Additional properties (validated by Component Catalog when available)"
+        }
+      },
+      "additionalProperties": true
+    },
+    "Relationship": {
+      "type": "object",
+      "required": ["from", "to", "type"],
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "Source component ID"
+        },
+        "to": {
+          "type": "string",
+          "description": "Target component ID"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["invokes", "reads", "writes", "reads_writes", "triggers", "origin", "routes_to", "stores_in", "publishes_to", "subscribes_to", "authenticates", "monitors"],
+          "description": "Relationship type"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "FinOps": {
+      "type": "object",
+      "properties": {
+        "costCenter": {
+          "type": "string"
+        },
+        "budget": {
+          "type": "object",
+          "properties": {
+            "monthlyLimit": { "type": "number" },
+            "currency": { "type": "string", "default": "USD" }
+          }
+        },
+        "requiredTags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tags that ALL components must have"
+        },
+        "allocation": {
+          "type": "object",
+          "properties": {
+            "strategy": {
+              "type": "string",
+              "enum": ["tags", "component", "manual"]
+            },
+            "keys": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

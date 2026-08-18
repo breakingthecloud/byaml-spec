@@ -1,0 +1,7 @@
+{
+  "latest": "0.3",
+  "versions": ["0.3"],
+  "publishedAt": "2026-08-17T00:00:00Z",
+  "registry": "byaml-schema-registry",
+  "note": "Migrado desde private-byaml-schema (local) a breakingthecloud/byaml-spec en ByaML-001. Registry versionado real se construye en ByaML-003."
+}

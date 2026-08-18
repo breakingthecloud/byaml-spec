@@ -5,7 +5,7 @@
 > **Org origen:** `brickstore-ai` (histórico) → **Org destino:** `breakingthecloud`
 > **Criterio:** qué se salva/migra → se mueve a `breakingthecloud/{nuevo}`. Nada de brickstore-ai se reutiliza en sitio.
 
-## Repos clonados (5, historia completa)
+## Repos clonados (6 en total: 5 remotos GitHub + 1 local brickstore)
 
 | # | Repo | Stack | Estado | Deliverables salvar | Verdict |
 |:-:|------|-------|--------|---------------------|:------:|
@@ -14,21 +14,29 @@
 | 3 | `public-byaml-schema` | byaml-cli Python + Docker + demos (113 files) | commit `1ee44e2` | `byaml-cli` (obsoleto); `byaml-demo/data/schema_v0_2.json` (v0.2 viejo); sample byaml + demos | ☠️ **descartar** (only demos/samples como referencia) |
 | 4 | `public-byaml-schema-api` | Python handler + terraform-deploy (14 files) | commit `98dd693` | `byaml_api_handler.py` endpoints latest/versions/catalog; `terraform-deploy/`; SECURITY.md | ♻️ **reescribir** → `byaml-schema-api` v2 (ByaML-003) |
 | 5 | `org-byaml-web` | Next.js 14 + framer-motion + tailwind (37 files) | commit `0cdb3d6` | Estructura/marketing byaml.org; deploy-s3 + cloudfront | ♻️ **reescribir** → `byaml-web` v2 narrativa graph (ByaML-005) |
+| 6 | `private-byaml-schema` | Repo **local** (`~/dev/brickstore/brick2026/`, sin remote) | sin commits git | **Schema v0.3 + catalog + policies + relationships + publish.sh** ← fuente de verdad del modelo | ♻️ **migrar** (hecho) → `byaml-spec/schema/v0.3/` + `scripts/publish.sh` |
 
-## ⚠️ Discrepancia: `private-byaml-schema`
+## ✅ Resuelto: `private-byaml-schema`
 
-El research (`research-2026-08-17-byaml-restart-directive.md`) lista `private-byaml-schema` como la
-"fuente de verdad del schema v0.3 + publish.sh → S3". **Dicho repo NO existe en GitHub** (verificado:
-`brickstore-ai/private-byaml-schema` → 404).
+> El research (`research-2026-08-17-byaml-restart-directive.md`) lista `private-byaml-schema` como la
+> "fuente de verdad del schema v0.3 + publish.sh → S3". Inicialmente parecía no existir (no está en
+> GitHub `brickstore-ai/` → 404). **Corregido:** es un repo **local** en la máquina, fuera de GitHub:
+> `~/dev/brickstore/brick2026/private-byaml-schema` (sin remote, sin commits git — solo `git init`).
 
-El schema v0.3 y la lógica de publish sí existen, pero ubicados en otros lados:
-- `byaml-core/.brickgpt-sow/schemas/byaml-v0.3.schema.json` ← schema v0.3
-- `byaml-finops-mcp/schema/byaml-v0.3.schema.json` ← copia del schema v0.3
-- `byaml-core/tests-byaml-publish/` + `test/publishing.e2e-spec.ts` ← pruebas/patrón de publish
+### Contenido del repo local (20 files)
+- `schema/byaml-v0.3.schema.json` ← **schema v0.3** (fuente de verdad)
+- `catalog/component-catalog.yaml` (v0.3, 1025 líneas) + `catalog/versions/` (v1.0.0-13types, v1.0.1, v1.0.2)
+- `catalog/policy-rules.yaml` + `catalog/relationship-matrix.yaml`
+- `publish.sh` → publica a S3 bucket `byaml-schema-registry` (schema/catalog/policies/relationships + manifest)
+- validators JS (`validate*.js`), `examples/*.byaml`, `migration/v02-to-v03.md`
 
-**Conclusión:** el contenido de `private-byaml-schema` (si existió) está disperso/extraíble de
-`byaml-core` + `byaml-finops-mcp`. Para ByaML-003 se reconstruye el `publish.sh` + manifest desde
-`byaml-core/GITOPS_WORKFLOW.md` + scripts de publish.
+### Acción tomada (ByaML-001)
+1. Copiado "tal cual" → `_reference/private-byaml-schema/` (workspace de referencia).
+2. **Migrado el contenido servible** → `breakingthecloud/byaml-spec`:
+   - `schema/v0.3/{schema.json, catalog.yaml, policies.yaml, relationships.yaml}`
+   - `schema/v0.3/manifest.json`
+   - `scripts/publish.sh` (adaptado a la nueva estructura `schema/<version>/`)
+3. El schema v0.3 se usa como base para el modelo v0.4 (grafo-first) en ByaML-002/003.
 
 ## Repos brickstore-ai NO clonados (fuera de alcance / en espera)
 

@@ -1,0 +1,112 @@
+# BYaML Policy Rules v1.0
+# Configurable governance and FinOps rules.
+# Each rule has: id, severity, description, condition, and check.
+
+version: "1.0"
+
+rules:
+  # === FinOps Rules ===
+  - id: FINOPS-001
+    severity: error
+    description: All production resources must have costCenter tag
+    when:
+      architecture.environment: prod
+    check:
+      type: require_tag
+      tag: costCenter
+
+  - id: FINOPS-002
+    severity: error
+    description: All resources must have owner tag
+    check:
+      type: require_tag
+      tag: owner
+
+  - id: FINOPS-003
+    severity: error
+    description: All resources must have environment tag
+    check:
+      type: require_tag
+      tag: env
+
+  - id: FINOPS-004
+    severity: warning
+    description: All resources should have app tag
+    check:
+      type: require_tag
+      tag: app
+
+  - id: FINOPS-005
+    severity: error
+    description: Production architectures must define a budget
+    when:
+      architecture.environment: prod
+    check:
+      type: require_field
+      path: finops.budget.monthlyLimit
+
+  - id: FINOPS-006
+    severity: warning
+    description: S3 buckets should have lifecycle policy
+    check:
+      type: require_property
+      componentType: aws.s3
+      property: lifecyclePolicy
+
+  - id: FINOPS-007
+    severity: warning
+    description: CloudWatch log groups should define retention
+    check:
+      type: require_property
+      componentType: aws.cloudwatch.logs
+      property: retentionDays
+
+  - id: FINOPS-008
+    severity: warning
+    description: NAT Gateway should be associated with costCenter tag
+    check:
+      type: require_tag
+      componentType: aws.nat-gateway
+      tag: costCenter
+
+  - id: FINOPS-009
+    severity: warning
+    description: RDS instances should declare backup retention
+    check:
+      type: require_property
+      componentType: aws.rds
+      property: backupRetention
+
+  - id: FINOPS-010
+    severity: error
+    description: Resources without any tags cannot pass in CI/CD
+    check:
+      type: require_any_tags
+
+  # === Operations Rules ===
+  - id: OPS-001
+    severity: error
+    description: Production architectures must have an owner
+    when:
+      architecture.environment: prod
+    check:
+      type: require_field
+      path: architecture.owner
+
+  - id: OPS-002
+    severity: warning
+    description: All architectures should have a description
+    check:
+      type: require_field
+      path: architecture.name
+
+  - id: OPS-003
+    severity: error
+    description: RDS Multi-AZ should not be enabled on dev/test environments
+    when:
+      architecture.environment: [dev, test, sandbox]
+    check:
+      type: forbid_property_value
+      componentType: aws.rds
+      property: multiAZ
+      value: true
