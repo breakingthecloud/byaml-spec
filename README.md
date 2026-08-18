@@ -14,13 +14,13 @@
 
 | Fase | SoW | Estado |
 |------|-----|:------:|
-| Scaffold + audit + spec | ByaML-001 | 🟡 In Progress |
-| Modelo grafo v0.4 + `byaml` PyPI | ByaML-002 | 🔴 |
+| Scaffold + audit + spec | ByaML-001 | 🟡 fase 0 done |
+| Modelo grafo v0.4 + `byaml` PyPI | ByaML-002 | ✅ COMPLETE (2026-08-18) |
 | Schema registry API v2 | ByaML-003 | 🔴 |
 | byaml-mcp v2 | ByaML-004 | 🔴 |
 | byaml.org web v2 | ByaML-005 | 🔴 |
 | Integración SOFE + deprecación | ByaML-006 | 🔴 |
-| Graph Core / Blast Radius / Cost Prop (`nan-graph`) | nan-001/002/003 | 🔴 |
+| Graph Core / Blast Radius / Cost Prop (`nan-graph`) | nan-001/002/003 | 🟡 nan-001 ✅ |
 
 ## Licencia
 

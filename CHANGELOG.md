@@ -6,6 +6,20 @@ will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-08-18
+
+### Added
+- **Schema v0.4 (Architecture Graph, graph-first)** — definido en **ByaML-002** SOBRE `nan-graph`:
+  - `schema/v0.4/graph-v0.4.schema.json` — JSON Schema (draft 2020-12): `version`/`id`/`generated_from`/`nodes[]`/`edges[]`/`insights`.
+  - `schema/v0.4/catalog.yaml` — **52 tipos** (baseline 18 = SOFE collectors + extendido), con aliases v0.3→v0.4 (`aws.nat-gateway→aws.natgateway`, `aws.secrets-manager→aws.secretsmanager`).
+  - `schema/v0.4/relationships.yaml` — matriz from/to/type + vocabulario `rel_types` (13).
+  - `schema/v0.4/examples/*.byaml` — **3 ejemplos** validados (minimal, sofe-eval, terraform).
+  - `schema/v0.4/SPEC.md` — spec del modelo. `schema/v0.4/manifest.json` — registry v0.4.
+- **`breakingthecloud/byaml-py`** (paquete PyPI `byaml` v0.4.0a1) — models pydantic + `validate` (JSON Schema + catalog + relationships), `convert.from_terraform` / `convert.from_evaluation`, `dump`/`load`, CLI (`byaml validate|convert|dump`). 11 tests pytest ✓, build ✓.
+
+### Changed
+- Confirmado: **v0.3 como formato de usuario DEJA DE EXISTIR** — evoluciona a v0.4 (grafo dentro de nan-graph + BYaML v2). `.byaml` = wire-format de interop, NO producto.
+
 ## [0.1.0] - 2026-08-17
 
 ### Added

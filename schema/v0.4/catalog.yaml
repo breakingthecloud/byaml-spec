@@ -1,0 +1,94 @@
+# BYaML Architecture Graph v0.4 — Component Catalog
+# Graph-first. Derives from SOFE collectors (scan) — baseline of >=17 resource types
+# guaranteed to be produced by a scan. Custom types are allowed (additive).
+#
+# A `type` in graph-v0.4 must resolve here for a STRICT validation; unknown types
+# produce a WARNING (open catalog, edge cases allowed) unless strict=False.
+
+version: "0.4"
+basis: "SOFE collectors (scan) + cloud resource taxonomy"
+layers: [edge, networking, compute, data, storage, security, integration, observability, other]
+
+# ─── Baseline: SOFE collector resource types (canonical from scan) ───────────────
+components:
+  # compute
+  - { type: aws.lambda,     category: compute,     layer: compute,        provider: aws, taggable: true,  sofe_collector: lambda_ }
+  - { type: aws.ec2,        category: compute,     layer: compute,        provider: aws, taggable: true,  sofe_collector: ec2 }
+  - { type: aws.ecs,        category: compute,     layer: compute,        provider: aws, taggable: true,  sofe_collector: ecs }
+  - { type: aws.eks,        category: compute,     layer: compute,        provider: aws, taggable: true,  sofe_collector: eks }
+  - { type: aws.sagemaker,  category: compute,     layer: compute,        provider: aws, taggable: true,  sofe_collector: sagemaker }
+
+  # edge / networking
+  - { type: aws.cloudfront,     category: networking, layer: edge,       provider: aws, taggable: true, sofe_collector: cloudfront }
+  - { type: aws.apigateway,     category: networking, layer: edge,       provider: aws, taggable: true, sofe_collector: apigateway }
+  - { type: aws.elb,            category: networking, layer: networking, provider: aws, taggable: true, sofe_collector: elb }
+  - { type: aws.route53,        category: networking, layer: edge,       provider: aws, taggable: true, sofe_collector: route53 }
+  - { type: aws.natgateway,     category: networking, layer: networking, provider: aws, taggable: true, sofe_collector: natgateway }
+
+  # data
+  - { type: aws.dynamodb,    category: database, layer: data,    provider: aws, taggable: true, sofe_collector: dynamodb }
+  - { type: aws.rds,         category: database, layer: data,    provider: aws, taggable: true, sofe_collector: rds }
+  - { type: aws.redshift,    category: database, layer: data,    provider: aws, taggable: true, sofe_collector: redshift }
+  - { type: aws.elasticache, category: database, layer: data,    provider: aws, taggable: true, sofe_collector: elasticache }
+
+  # storage
+  - { type: aws.s3,   category: storage, layer: storage, provider: aws, taggable: true, sofe_collector: s3 }
+  - { type: aws.ebs,  category: storage, layer: storage, provider: aws, taggable: true, sofe_collector: ebs }
+
+  # security
+  - { type: aws.secretsmanager, category: security, layer: security, provider: aws, taggable: true, sofe_collector: secretsmanager }
+
+# ─── Extended catalog (common AWS types, additive beyond scan baseline) ────────
+  # messaging / integration
+  - { type: aws.sqs,            category: integration, layer: integration,    provider: aws, taggable: true }
+  - { type: aws.sns,            category: integration, layer: integration,    provider: aws, taggable: true }
+  - { type: aws.eventbridge,    category: integration, layer: integration,    provider: aws, taggable: true }
+  - { type: aws.kinesis,        category: integration, layer: integration,    provider: aws, taggable: true }
+  - { type: aws.stepfunctions,  category: integration, layer: integration,    provider: aws, taggable: true }
+  - { type: aws.appsync,        category: integration, layer: integration,    provider: aws, taggable: true }
+  - { type: aws.msk,            category: integration, layer: integration,    provider: aws, taggable: true }
+
+  # observability
+  - { type: aws.cloudwatch.logs, category: observability, layer: observability, provider: aws, taggable: true }
+
+  # data (extended)
+  - { type: aws.opensearch,    category: database, layer: data, provider: aws, taggable: true }
+  - { type: aws.aurora,        category: database, layer: data, provider: aws, taggable: true }
+  - { type: aws.glue,          category: data,     layer: data, provider: aws, taggable: true }
+  - { type: aws.athena,        category: data,     layer: data, provider: aws, taggable: true }
+  - { type: aws.documentdb,    category: database, layer: data, provider: aws, taggable: true }
+  - { type: aws.neptune,       category: database, layer: data, provider: aws, taggable: true }
+  - { type: aws.efs,           category: storage,  layer: storage, provider: aws, taggable: true }
+  - { type: aws.backup,        category: storage,  layer: storage, provider: aws, taggable: true }
+
+  # compute (extended)
+  - { type: aws.fargate, category: compute, layer: compute, provider: aws, taggable: true }
+  - { type: aws.elasticbeanstalk, category: compute, layer: compute, provider: aws, taggable: true }
+  - { type: aws.workspaces, category: compute, layer: compute, provider: aws, taggable: true }
+
+  # networking (extended)
+  - { type: aws.alb, category: networking, layer: networking, provider: aws, taggable: true }
+  - { type: aws.vpc, category: networking, layer: networking, provider: aws, taggable: true }
+  - { type: aws.vpn, category: networking, layer: networking, provider: aws, taggable: true }
+  - { type: aws.transit-gateway, category: networking, layer: networking, provider: aws, taggable: true }
+  - { type: aws.network-firewall, category: networking, layer: networking, provider: aws, taggable: true }
+  - { type: aws.waf, category: networking, layer: edge, provider: aws, taggable: true }
+
+  # security (extended)
+  - { type: aws.cognito, category: security, layer: security, provider: aws, taggable: true }
+  - { type: aws.kms, category: security, layer: security, provider: aws, taggable: true }
+  - { type: aws.iam, category: security, layer: security, provider: aws, taggable: false }
+  - { type: aws.security-hub, category: security, layer: security, provider: aws, taggable: false }
+  - { type: aws.guardduty, category: security, layer: security, provider: aws, taggable: true }
+  - { type: aws.cloudtrail, category: security, layer: security, provider: aws, taggable: true }
+  - { type: aws.config, category: security, layer: security, provider: aws, taggable: false }
+
+  # ci/cd
+  - { type: aws.codepipeline, category: integration, layer: integration, provider: aws, taggable: true }
+  - { type: aws.codebuild, category: integration, layer: integration, provider: aws, taggable: true }
+  - { type: aws.ecr, category: storage, layer: storage, provider: aws, taggable: true }
+
+# ─── Aliases (v0.3 → v0.4 canonical) ───────────────────────────────────────────
+aliases:
+  aws.nat-gateway: aws.natgateway
+  aws.secrets-manager: aws.secretsmanager

@@ -1,0 +1,114 @@
+# BYaML Relationship Matrix v0.4
+# Which from/to/type combinations are valid for the Architecture Graph.
+# If a relationship is NOT in this matrix, validation produces a WARNING (not error)
+# to allow for edge cases while flagging likely mistakes.
+#
+# `type` on an edge must be one of the relationship types in this matrix AND
+# consistent with the from/to node types. Unmatched combos → WARNING.
+
+version: "0.4"
+
+# Canonical relationship type vocabulary (extends v0.3)
+rel_types:
+  - invokes
+  - routes_to
+  - origin
+  - reads
+  - writes
+  - reads_writes
+  - publishes_to
+  - triggers
+  - monitors
+  - hosts
+  - depends_on
+  - calls
+  - contains
+
+relationships:
+  # Edge (CloudFront / API Gateway) → compute
+  - from: aws.cloudfront
+    to: [aws.s3, aws.alb, aws.apigateway, aws.lambda, aws.ec2]
+    type: [origin]
+  - from: aws.apigateway
+    to: [aws.lambda, aws.alb, aws.ec2, aws.ecs, aws.eks]
+    type: [invokes, routes_to]
+
+  # Load balancer → compute
+  - from: aws.alb
+    to: [aws.ec2, aws.lambda, aws.ecs, aws.eks]
+    type: [routes_to]
+  - from: aws.elb
+    to: [aws.ec2, aws.ecs, aws.eks]
+    type: [routes_to]
+
+  # Compute → data / storage / integration
+  - from: aws.lambda
+    to: [aws.dynamodb, aws.s3, aws.rds, aws.redshift, aws.elasticache, aws.opensearch, aws.aurora, aws.documentdb, aws.neptune, aws.glue, aws.efs]
+    type: [reads, writes, reads_writes]
+  - from: aws.lambda
+    to: [aws.sqs, aws.sns, aws.kinesis, aws.eventbridge, aws.stepfunctions, aws.appsync]
+    type: [publishes_to, invokes, triggers]
+  - from: aws.lambda
+    to: [aws.cloudwatch.logs]
+    type: [writes]
+  - from: aws.ec2
+    to: [aws.dynamodb, aws.s3, aws.rds, aws.redshift, aws.elasticache, aws.efs, aws.ebs]
+    type: [reads, writes, reads_writes]
+  - from: aws.ecs
+    to: [aws.dynamodb, aws.s3, aws.rds, aws.redis, aws.efs]
+    type: [reads, writes, reads_writes]
+  - from: aws.eks
+    to: [aws.dynamodb, aws.s3, aws.rds, aws.efs]
+    type: [reads, writes, reads_writes]
+  - from: aws.sagemaker
+    to: [aws.s3, aws.dynamodb]
+    type: [reads, writes, reads_writes]
+
+  # Integration / messaging → triggers
+  - from: aws.eventbridge
+    to: [aws.lambda, aws.stepfunctions, aws.sqs, aws.sns, aws.ecs, aws.eks]
+    type: [triggers, publishes_to]
+  - from: aws.sqs
+    to: [aws.lambda]
+    type: [triggers]
+  - from: aws.sns
+    to: [aws.lambda, aws.sqs]
+    type: [triggers, publishes_to]
+  - from: aws.kinesis
+    to: [aws.lambda]
+    type: [triggers]
+  - from: aws.stepfunctions
+    to: [aws.lambda, aws.ecs, aws.eks]
+    type: [invokes]
+
+  # Monitoring / observability
+  - from: aws.cloudwatch.logs
+    to: [aws.lambda, aws.ec2, aws.ecs, aws.eks]
+    type: [monitors]
+
+  # Security → compute/data (grants access)
+  - from: aws.secretsmanager
+    to: [aws.lambda, aws.ec2, aws.ecs, aws.eks, aws.rds]
+    type: [depends_on, reads]
+  - from: aws.kms
+    to: [aws.s3, aws.dynamodb, aws.ebs, aws.rds]
+    type: [depends_on, contains]
+
+  # Networking (generic capture layer)
+  - from: aws.natgateway
+    to: [aws.ec2, aws.lambda, aws.ecs, aws.eks]
+    type: [routes_to]
+  - from: aws.route53
+    to: [aws.cloudfront, aws.alb, aws.elb, aws.apigateway]
+    type: [routes_to, depends_on]
+  - from: aws.alb
+    to: [aws.vpc]
+    type: [depends_on, contains]
+
+  # CI/CD → deploy targets
+  - from: aws.codepipeline
+    to: [aws.codebuild, aws.ecr, aws.lambda, aws.ecs, aws.eks]
+    type: [triggers, invokes]
+  - from: aws.codebuild
+    to: [aws.ecr, aws.lambda, aws.s3]
+    type: [publishes_to, writes]

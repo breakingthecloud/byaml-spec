@@ -1,0 +1,7 @@
+{
+  "latest": "0.4",
+  "versions": ["0.3", "0.4"],
+  "publishedAt": "2026-08-18T00:00:00Z",
+  "registry": "byaml-schema-registry",
+  "note": "v0.4 = SOFE Architecture Graph (graph-first). Definido en ByaML-002 sobre nan-graph. Base: v0.3 migrado en ByaML-001. Registry versionado real se construye en ByaML-003."
+}

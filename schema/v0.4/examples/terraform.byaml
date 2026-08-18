@@ -1,0 +1,38 @@
+# BYaML v0.4 — example converted from a Terraform plan
+# (produced by `byaml convert --terraform tfplan.json`)
+version: "0.4"
+id: tf_plan_20260817
+generated_from:
+  source: terraform
+  provider: aws
+  account: "279624932954"
+  scanned_at: "2026-08-17T11:30:00Z"
+
+nodes:
+  - id: aws_s3_bucket.assets
+    type: aws.s3
+    layer: storage
+    region: us-east-1
+    attributes:
+      bucket_name: company-assets-prod
+    cost: { monthly: 2.1 }
+  - id: aws_lambda_function.payments
+    type: aws.lambda
+    layer: compute
+    region: us-east-1
+    attributes:
+      runtime: python3.11
+      memory: 512
+      timeout: 30
+    cost: { monthly: 3.4 }
+  - id: aws_dynamodb_table.orders
+    type: aws.dynamodb
+    layer: data
+    region: us-east-1
+    attributes:
+      billing_mode: PAY_PER_REQUEST
+    cost: { monthly: 15.2 }
+
+edges:
+  - { from: aws_lambda_function.payments, to: aws_s3_bucket.assets, type: reads_writes }
+  - { from: aws_lambda_function.payments, to: aws_dynamodb_table.orders, type: reads_writes }

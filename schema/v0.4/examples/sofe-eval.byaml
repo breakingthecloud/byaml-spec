@@ -1,0 +1,53 @@
+# BYaML v0.4 — example from SOFE evaluation (scan-derived)
+version: "0.4"
+id: evals_20260817_eval_8f2a
+generated_from:
+  source: sofe
+  eval_id: 8f2a9c1e
+  account: "279624932954"
+  scanned_at: "2026-08-17T10:00:00Z"
+  provider: aws
+
+nodes:
+  - id: cdn-orders
+    type: aws.cloudfront
+    layer: edge
+    region: us-east-1
+    account: "279624932954"
+    cost: { monthly: 8.9 }
+  - id: api-gw-prod
+    type: aws.apigateway
+    layer: edge
+    region: us-east-1
+    account: "279624932954"
+    cost: { monthly: 12.4 }
+    findings: { count: 2, worst: "high", policies: ["require-cost-tags", "no-unused-api"] }
+    owner: team-billing
+  - id: lambda-payments
+    type: aws.lambda
+    layer: compute
+    region: us-east-1
+    account: "279624932954"
+    cost: { monthly: 3.1 }
+    owner: team-billing
+  - id: db-users
+    type: aws.dynamodb
+    layer: data
+    region: us-east-1
+    account: "279624932954"
+    cost: { monthly: 41.7 }
+    findings: { count: 1, worst: "medium", policies: ["encryption-at-rest"] }
+    owner: team-billing
+
+edges:
+  - { from: cdn-orders, to: api-gw-prod, type: origin, weight: 5 }
+  - { from: api-gw-prod, to: lambda-payments, type: invokes, weight: 5 }
+  - { from: lambda-payments, to: db-users, type: reads_writes, weight: 3 }
+
+# insights: precomputed by nan-graph; may be empty on serialization
+insights:
+  spof: ["db-users"]
+  blast_radius:
+    lambda-payments: ["cdn-orders", "api-gw-prod", "db-users"]
+  cost_chains:
+    - { path: ["cdn-orders", "api-gw-prod", "lambda-payments", "db-users"], monthly: 66.1 }

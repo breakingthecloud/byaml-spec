@@ -1,0 +1,26 @@
+# BYaML v0.4 — minimal Architecture Graph
+version: "0.4"
+id: minimal-sample
+generated_from:
+  source: manual
+  provider: aws
+
+nodes:
+  - id: api
+    type: aws.apigateway
+    layer: edge
+    label: Payments API
+  - id: payments
+    type: aws.lambda
+    layer: compute
+    cost: { monthly: 3.1 }
+    owner: team-billing
+  - id: db
+    type: aws.dynamodb
+    layer: data
+    cost: { monthly: 12.4 }
+    owner: team-billing
+
+edges:
+  - { from: api, to: payments, type: invokes }
+  - { from: payments, to: db, type: reads_writes }
