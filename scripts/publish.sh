@@ -17,9 +17,10 @@
 set -e
 
 VERSION=${1:?"usage: publish.sh <version>  (ej. 0.4.0)"}
-# mapea "0.4.0" → carpeta fuente "schema/0.4" (el spec versiona como v0.4)
+# mapea "0.4.0" → carpeta fuente "schema/v0.4" (el spec versiona como v0.4)
 SHORT="${VERSION%.*}"; [[ "$SHORT" == "0.4" ]] && SHORT="0.4"
-VERSION_DIR="schema/${SHORT}"
+VERSION_DIR="schema/v${SHORT}"
+[[ -d "${VERSION_DIR}" ]] || VERSION_DIR="schema/${SHORT}"
 BUCKET="byaml-schema-registry"
 PROFILE=${AWS_PROFILE:-"cc"}
 PREFIX="v${VERSION}"
