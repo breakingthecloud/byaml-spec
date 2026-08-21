@@ -1,0 +1,112 @@
+# BYaML Policy Rules v0.4
+# Soporte del Architecture Graph: reglas de validación y buenas prácticas.
+# Consumido por schema.byaml.org/v1/graph/schema/version/{v}/policies y por
+# byaml-py validate() (STRICT/lenient). Coherente con catalog.yaml y relationships.yaml.
+#
+# Policy types:
+#   - validate   → regla de validación sobre el grafo (errores/warnings)
+#   - guardrail  → recomendación / buena práctica (no bloquea)
+#   - finops     → regla de costo/attribution
+#   - security   → regla de seguridad / minimal privilege
+
+version: "0.4"
+basis: "SOFE collectors + Architecture Graph v0.4 (catalog.yaml + relationships.yaml)"
+
+policies:
+  # ─── validate ───────────────────────────────────────────────────────────────
+  - id: P-VALID-001
+    type: validate
+    severity: error
+    name: "nodes require id + type"
+    description: "Every node must have a unique `id` and a `type`."
+    applies_to: nodes
+    check: "node.id is not None and node.type is not None"
+
+  - id: P-VALID-002
+    type: validate
+    severity: error
+    name: "edges require from/to/relType"
+    description: "Every edge must define `from`, `to` and `relType`."
+    applies_to: edges
+    check: "edge.from is not None and edge.to is not None and edge.relType is not None"
+
+  - id: P-VALID-003
+    type: validate
+    severity: warning
+    name: "unknown node type"
+    description: "Node `type` not present in catalog.yaml -> WARNING (open catalog)."
+    applies_to: nodes
+    check: "node.type in catalog"
+
+  - id: P-VALID-004
+    type: validate
+    severity: warning
+    name: "edge relType outside matrix"
+    description: "Edge relType not present in relationships.yaml -> WARNING."
+    applies_to: edges
+    check: "edge.relType in rel_types"
+
+  - id: P-VALID-005
+    type: validate
+    severity: warning
+    name: "relationship combo not in matrix"
+    description: "from/to/type combination not listed in the relationship matrix -> WARNING."
+    applies_to: edges
+    check: "(edge.from, edge.to, edge.relType) in relationship_matrix"
+
+  # ─── guardrail ──────────────────────────────────────────────────────────────
+  - id: P-GRD-001
+    type: guardrail
+    severity: info
+    name: "taggable resources should have cost/owner"
+    description: "taggable resources (catalog taggable: true) should carry owner + monthly_cost for FinOps."
+    applies_to: nodes
+    check: "node.attrs.owner and node.attrs.monthly_cost is not None"
+
+  - id: P-GRD-002
+    type: guardrail
+    severity: info
+    name: "avoid orphan nodes"
+    description: "Nodes with neither incoming nor outgoing edges may be dead weight."
+    applies_to: nodes
+    check: "fan_in(node) > 0 or fan_out(node) > 0"
+
+  # ─── finops ─────────────────────────────────────────────────────────────────
+  - id: P-FIN-001
+    type: finops
+    severity: info
+    name: "cost attribution per owner/team"
+    description: "total graph cost should be attributable to owners (sum of monthly_cost by owner)."
+    applies_to: graph
+    check: "all nodes have attrs.owner OR attrs.cost"
+
+  - id: P-FIN-002
+    type: finops
+    severity: info
+    name: "eval baseline >= 17 canonical types"
+    description: "A graph generated from a scan should cover the canonical SOFE collectors baseline (>=17)."
+    applies_to: graph
+    check: "len(types_used & catalog_sofe_baseline) >= 17"
+
+  # ─── security ───────────────────────────────────────────────────────────────
+  - id: P-SEC-001
+    type: security
+    severity: warning
+    name: "secrets should not be tagged as pure compute"
+    description: "Secret-manager-like resources shouldn't be mixed as generic compute (minimal privilege)."
+    applies_to: nodes
+    check: "node.type not in ('aws.secretsmanager',) or node.layer != 'compute'"
+
+  - id: P-SEC-002
+    type: security
+    severity: info
+    name: "SPOF visibility"
+    description: "Nodes with high fan-in (SPOF) should be flagged; use nan-graph singlePointsOfFailure."
+    applies_to: graph
+    check: "fan_in(node) < threshold"
+    threshold: 3
+
+defaults:
+  strict: false
+  catalog_alias_resolution: true
+  threshold: { spof: 3 }

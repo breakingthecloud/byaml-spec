@@ -6,6 +6,21 @@ will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-08-20
+
+### Added
+- **`schema/v0.4/policies.yaml`** — política rules v0.4 (ByaML-003): 11 policies en 4 tipos
+  (`validate`, `guardrail`, `finops`, `security`) coherentes con catalog.yaml + relationships.yaml
+  (P-VALID-001..005, P-GRD-001/002, P-FIN-001/002, P-SEC-001/002).
+- **`scripts/publish.sh`** — actualizado para estructura v0.4: publica `v<version>/schema.json`
+  (desde `graph-v0.4.schema.json`), `catalog.yaml`, `relationships.yaml`, `policies.yaml` (si existe)
+  + merge de `manifest.json` (`latest` + versions). Bash-safe, uso: `./scripts/publish.sh 0.4.0`.
+
+### Changed
+- Confirmado canónico: field del catalog es **`sofe_collector`** (17 baseline + 35 extendido), no
+  `source_collector` — alineado con research 2026-08-20 y AC de ByaML-003 (ref
+  `research-2026-08-20-byaml-v2-user-research.md` §6.2).
+
 ## [0.2.0] - 2026-08-18
 
 ### Added
